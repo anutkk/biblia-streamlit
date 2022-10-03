@@ -1,5 +1,6 @@
 import kraken
 import kraken.lib
+from kraken.lib.vgsl import TorchVGSLModel
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
@@ -19,7 +20,7 @@ image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpe
 @st.cache
 def load_seg_model(): 
     model_path = 'models/seg/biblialong02_se3_2_tl.mlmodel'
-    model = kraken.lib.vgsl.TorchVGSLModel.load_model(model_path)
+    model = TorchVGSLModel.load_model(model_path)
     return model 
 
 @st.cache
