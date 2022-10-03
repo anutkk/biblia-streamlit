@@ -1,6 +1,7 @@
 import kraken
-import kraken.lib
 from kraken.lib.vgsl import TorchVGSLModel
+from kraken.lib import models
+# from kraken import blla, rpred
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
@@ -26,7 +27,7 @@ def load_seg_model():
 @st.cache
 def load_rec_model(): 
     rec_model_path = 'models/rec/biblia_tr_9.mlmodel'
-    model = kraken.lib.models.load_any(rec_model_path)
+    model = models.load_any(rec_model_path)
     return model
 
 seg_model = load_seg_model()
