@@ -1,4 +1,5 @@
 import kraken
+import kraken.lib
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
