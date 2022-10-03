@@ -1,7 +1,7 @@
 import kraken
 from kraken.lib.vgsl import TorchVGSLModel
 from kraken.lib import models
-# from kraken import blla, rpred
+from kraken import blla, rpred
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
@@ -38,8 +38,8 @@ if image is not None:
 
     with st.spinner("🤖 AI is at Work! "):
         
-        baseline_seg = kraken.blla.segment(input_image, model=seg_model, text_direction='rl')
-        pred_it = kraken.rpred.rpred(rec_model, input_image, baseline_seg)
+        baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
+        pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
         result_text = []
         for record in pred_it:
             t = str(record)
