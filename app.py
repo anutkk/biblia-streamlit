@@ -1,13 +1,13 @@
-import easyocr as ocr  #OCR
+import kraken
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
 
 #title
-st.title("Easy OCR - Extract Text from Images")
+st.title("BiblIA OCR")
 
 #subtitle
-st.markdown("## Optical Character Recognition - Using `easyocr`, `streamlit`")
+st.markdown("## Hebrew handwritten text recognition using `kraken`, `streamlit`")
 
 st.markdown("")
 
@@ -16,27 +16,31 @@ image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpe
 
 
 @st.cache
-def load_model(): 
-    reader = ocr.Reader(['en'],model_storage_directory='.')
-    return reader 
+def load_seg_model(): 
+    model_path = 'models/seg/biblialong02_se3_2_tl.mlmodel'
+    model = kraken.lib.vgsl.TorchVGSLModel.load_model(model_path)
+    return model 
 
-reader = load_model() #load model
+@st.cache
+def load_rec_model(): 
+    rec_model_path = 'models/rec/biblia_tr_9.mlmodel'
+    model = kraken.lib.models.load_any(rec_model_path)
+    return model
 
+seg_model = load_seg_model()
+rec_model = load_rec_model()
 if image is not None:
-
     input_image = Image.open(image) #read image
     st.image(input_image) #display image
 
     with st.spinner("🤖 AI is at Work! "):
         
-
-        result = reader.readtext(np.array(input_image))
-
-        result_text = [] #empty list for results
-
-
-        for text in result:
-            result_text.append(text[1])
+        baseline_seg = kraken.blla.segment(input_image, model=seg_model, text_direction='rl')
+        pred_it = kraken.rpred.rpred(rec_model, input_image, baseline_seg)
+        result_text = []
+        for record in pred_it:
+            t = str(record)
+            result_text.append(t)
 
         st.write(result_text)
     #st.success("Here you go!")
@@ -44,7 +48,7 @@ if image is not None:
 else:
     st.write("Upload an Image")
 
-st.caption("Made with ❤️ by @1littlecoder")
+st.caption("Code by @anutkk, credit for baseline code to @1littlecoder's code.")
 
 
 
