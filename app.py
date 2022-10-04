@@ -14,8 +14,13 @@ st.markdown("## Hebrew handwritten text recognition using `kraken`, `streamlit`"
 
 st.markdown("")
 
+col1, col2 = st.columns(2)
+
+col1.header("Image")
+col2.header("Text")
+
 #image uploader
-image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
+image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
 
 
 @st.cache
@@ -32,9 +37,14 @@ def load_rec_model():
 
 seg_model = load_seg_model()
 rec_model = load_rec_model()
+
+
+
 if image is not None:
     input_image = Image.open(image) #read image
-    st.image(input_image) #display image
+    
+    # st.image(input_image) #display image
+    col1.image(input_image, use_column_width=True)
 
     with st.spinner("🤖 AI is at Work! "):
         
@@ -45,7 +55,8 @@ if image is not None:
             t = str(record)
             result_text.append(t)
 
-        st.write(result_text)
+        result_text_joined = "\n".join(result_text)
+        col2.write(result_text_joined)
     #st.success("Here you go!")
     st.balloons()
 else:
