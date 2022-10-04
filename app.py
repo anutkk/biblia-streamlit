@@ -35,13 +35,18 @@ def load_seg_model():
 def load_rec_model(): 
     rec_model_path = 'models/rec/biblia_tr_9.mlmodel'
     model = models.load_any(rec_model_path)
-    model.eval()
+    # model.eval()
     return model
 
 seg_model = load_seg_model()
 rec_model = load_rec_model()
 
-
+if image is None:
+    with col1:     
+        #image uploader
+        image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
+    with col2:
+        st.write("Upload an Image")
 
 if image is not None:
     input_image = Image.open(image) #read image
@@ -72,13 +77,8 @@ if image is not None:
             st.write(result_text_joined)
     #st.success("Here you go!")
     st.balloons()
-else:
     
-    with col1:     
-        #image uploader
-        image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
-    with col2:
-        st.write("Upload an Image")
+    
 
 st.caption("Code by @anutkk, credit for baseline code to @1littlecoder's code.")
 
