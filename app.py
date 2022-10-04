@@ -5,6 +5,7 @@ from kraken import blla, rpred
 import streamlit as st  #Web App
 from PIL import Image #Image Processing
 import numpy as np #Image Processing 
+import torch
 
 #title
 st.title("BiblIA OCR")
@@ -27,12 +28,14 @@ image = None
 def load_seg_model(): 
     model_path = 'models/seg/biblialong02_se3_2_tl.mlmodel'
     model = TorchVGSLModel.load_model(model_path)
+    model.eval()
     return model 
 
 @st.cache
 def load_rec_model(): 
     rec_model_path = 'models/rec/biblia_tr_9.mlmodel'
     model = models.load_any(rec_model_path)
+    model.eval()
     return model
 
 seg_model = load_seg_model()
@@ -49,13 +52,13 @@ if image is not None:
 
     with col2:
         with st.spinner("🤖 AI is at Work! "):
-            
-            baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
-            pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
-            result_text = []
-            for record in pred_it:
-                t = str(record)
-                result_text.append(t)
+            with torch.no_grad():
+                baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
+                pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
+                result_text = []
+                for record in pred_it:
+                    t = str(record)
+                    result_text.append(t)
 
             result_text_joined = "\n".join(result_text)
             st.markdown("""
