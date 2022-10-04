@@ -19,9 +19,9 @@ col1, col2 = st.columns(2)
 col1.header("Image")
 col2.header("Text")
 
-#image uploader
-image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
-
+# #image uploader
+# image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
+image = None
 
 @st.cache
 def load_seg_model(): 
@@ -44,23 +44,38 @@ if image is not None:
     input_image = Image.open(image) #read image
     
     # st.image(input_image) #display image
-    col1.image(input_image, use_column_width=True)
+    with col1:
+        st.image(input_image, use_column_width=True)
 
-    with st.spinner("🤖 AI is at Work! "):
-        
-        baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
-        pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
-        result_text = []
-        for record in pred_it:
-            t = str(record)
-            result_text.append(t)
+    with col2:
+        with st.spinner("🤖 AI is at Work! "):
+            
+            baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
+            pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
+            result_text = []
+            for record in pred_it:
+                t = str(record)
+                result_text.append(t)
 
-        result_text_joined = "\n".join(result_text)
-        col2.write(result_text_joined)
+            result_text_joined = "\n".join(result_text)
+            st.markdown("""
+            <style>
+            input {
+            unicode-bidi:bidi-override;
+            direction: RTL;
+            }
+            </style>
+                """, unsafe_allow_html=True)
+            st.write(result_text_joined)
     #st.success("Here you go!")
     st.balloons()
 else:
-    st.write("Upload an Image")
+    
+    with col1:     
+        #image uploader
+        image = col1.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
+    with col2:
+        st.write("Upload an Image")
 
 st.caption("Code by @anutkk, credit for baseline code to @1littlecoder's code.")
 
