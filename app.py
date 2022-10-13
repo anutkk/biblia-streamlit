@@ -11,7 +11,7 @@ import torch
 st.title("BiblIA OCR")
 
 #subtitle
-st.markdown("## Hebrew handwritten text recognition using `kraken`, `streamlit`")
+st.markdown("## Hebrew handwritten text recognition")
 
 st.markdown("")
 
