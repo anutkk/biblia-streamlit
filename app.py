@@ -31,7 +31,7 @@ def load_seg_model():
     model.eval()
     return model 
 
-@st.cache
+@st.cache(allow_output_mutation=True)
 def load_rec_model(): 
     rec_model_path = 'models/rec/biblia_tr_9.mlmodel'
     model = models.load_any(rec_model_path)
