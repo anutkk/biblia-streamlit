@@ -60,22 +60,26 @@ if image is not None:
             result_text_joined = "\n".join(result_text)
             st.markdown("""
             <style>
-            input {
+            .rtl {
             unicode-bidi:bidi-override;
             direction: RTL;
             }
             </style>
                 """, unsafe_allow_html=True)
-            st.write(result_text_joined)
+            
+            st.markdown('<div class="rtl">%s</div>' % result_text_joined, unsafe_allow_html=True)
+            # st.write(result_text_joined)
     #st.success("Here you go!")
     st.balloons()
 else:
     with col2:
         st.write("Upload an Image")
     
-    
+st.caption("Backend: [BiblIA model](https://zenodo.org/record/5468286#.Y0hD2XZByUk) using [kraken OCR system](https://kraken.re/master/index.html)")
+st.caption("Stökl Ben Ezra, Daniel; Brown-DeVost, Bronson; Jablonski, Pawel; Kiessling, Benjamin; Lolli, Elena; Lapin, Hayim: \"BiblIA - a general model for Medieval Hebrew manuscripts and an open annotated dataset\" published in The 6th International Workshop on Historical Document Imaging and Processing (HIP '21) (HIP@ICDAR), Lausanne, Switzerland, September 5-6, 2021")
 
-st.caption("Code by @anutkk, credit for baseline code to @1littlecoder's code.")
+
+st.caption("Code by [Shmuel Londner](https://github.com/anutkk).")
 
 
 
