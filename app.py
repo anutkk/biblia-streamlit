@@ -3,9 +3,10 @@ from kraken.lib.vgsl import TorchVGSLModel
 from kraken.lib import models
 from kraken import blla, rpred
 import streamlit as st  #Web App
-from PIL import Image #Image Processing
+from PIL import Image, ImageDraw #Image Processing
 import numpy as np #Image Processing 
 import torch
+from itertools import cycle
 
 #title
 st.title("BiblIA OCR")
@@ -20,8 +21,8 @@ image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpe
 
 col1, col2 = st.columns(2)
 
-col1.header("Image")
-col2.header("Text")
+col1.header("Segmentation")
+col2.header("Transcription")
 
 @st.cache
 def load_seg_model(): 
@@ -42,15 +43,34 @@ rec_model = load_rec_model()
 
 if image is not None:
     input_image = Image.open(image) #read image
+
+    
     
     # st.image(input_image) #display image
     with col1:
-        st.image(input_image, use_column_width=True)
+        with st.spinner("🤖 AI is at Work! "):
+            #compute and display segmentation
+            baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
+            bmap = (0, 130, 200, 255)
+            cmap = cycle([(230, 25, 75, 127),
+                        (60, 180, 75, 127)])
+            im = input_image.convert('RGBA')
+            tmp = Image.new('RGBA', im.size, (0, 0, 0, 0))
+            draw = ImageDraw.Draw(tmp)
+            for  line in baseline_seg['lines']:
+                    c = next(cmap)
+                    if line['boundary']:
+                        draw.polygon([tuple(x) for x in line['boundary']], fill=c, outline=c[:3])
+                    # if line['baseline']:
+                    #     draw.line([tuple(x) for x in line['baseline']], fill=bmap, width=2, joint='curve')
+                    # draw.text(line['baseline'][0], str(idx), fill=(0, 0, 0, 255))
+            base_image = Image.alpha_composite(im, tmp)
+            st.image(base_image, use_column_width=True)
 
     with col2:
         with st.spinner("🤖 AI is at Work! "):
             with torch.no_grad():
-                baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
+                # baseline_seg = blla.segment(input_image, model=seg_model, text_direction='rl')
                 pred_it = rpred.rpred(rec_model, input_image, baseline_seg)
                 result_text = []
                 for record in pred_it:
