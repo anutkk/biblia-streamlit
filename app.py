@@ -76,7 +76,7 @@ else:
         st.write("Upload an Image")
     
 st.caption("Backend: [BiblIA model](https://zenodo.org/record/5468286#.Y0hD2XZByUk) using [kraken OCR system](https://kraken.re/master/index.html)")
-st.caption("Stökl Ben Ezra, D., Brown-DeVost, B., Jablonski, P., Kiessling, B., Lolli, E., Lapin, H. “BiblIA – a General Model for Medieval Hebrew Manuscripts and an Open Annotated Dataset” HIP@ICDAR 2021")
+st.caption("Academic reference: Stökl Ben Ezra, D., Brown-DeVost, B., Jablonski, P., Kiessling, B., Lolli, E., Lapin, H. “BiblIA – a General Model for Medieval Hebrew Manuscripts and an Open Annotated Dataset” HIP@ICDAR 2021")
 
 
 st.caption("Code by [Shmuel Londner](https://github.com/anutkk).")
