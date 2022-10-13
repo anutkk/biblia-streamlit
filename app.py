@@ -57,7 +57,7 @@ if image is not None:
                     t = str(record)
                     result_text.append(t)
 
-            result_text_joined = "\n".join(result_text)
+            result_text_joined = "<br>".join(result_text)
             st.markdown("""
             <style>
             .rtl {
