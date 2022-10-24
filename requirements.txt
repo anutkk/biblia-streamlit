@@ -1,2 +1,3 @@
 kraken
 streamlit
+streamlit-drawable-canvas
