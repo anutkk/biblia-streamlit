@@ -95,7 +95,7 @@ if image is not None:
         with col1:
             with st.spinner("🤖 AI is at Work! "):
                 #compute and display segmentation
-                baseline_seg = blla.segment(im_crop, model=seg_model, text_direction='rl')
+                baseline_seg = blla.segment(im_crop, model=seg_model)
                 bmap = (0, 130, 200, 255)
                 cmap = cycle([(230, 25, 75, 127),
                             (60, 180, 75, 127)])
